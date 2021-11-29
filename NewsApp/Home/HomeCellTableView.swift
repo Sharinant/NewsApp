@@ -34,7 +34,7 @@ class HomeCellTableView: UITableViewCell {
     let titleLabel : UILabel = {
         let label = UILabel()
         label.text = ""
-        label.numberOfLines = 0
+        label.numberOfLines = 5
         return label
     }()
     
@@ -52,6 +52,15 @@ class HomeCellTableView: UITableViewCell {
         return button
     }()
     
+    
+    public func chechStar(aNew : News) {
+        if favoriteNews.contains(aNew) {
+            favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+
+        }
+    }
 
     public func setup(with vm : HomeCellViewModel)  {
         contentView.backgroundColor = .lightGray
@@ -64,7 +73,21 @@ class HomeCellTableView: UITableViewCell {
         
         if vm.isInFav! {
             favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+
         }
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("ChangeFavStar"), object: nil, queue: nil) { Notification in
+            
+            if vm.checkNewInFav() {
+                self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            } else {
+                self.favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+
+            }
+            
+        }
+     
        
     
     for element in [imageViewNews,titleLabel,sourceLabel,favoriteButton] {
@@ -95,9 +118,9 @@ class HomeCellTableView: UITableViewCell {
     }
     
     override func layoutSubviews() {
-        contentView.pin.vertically(10).horizontally(5)
+        contentView.pin.vertically(10).horizontally(10)
         imageViewNews.pin.left(10).vertically(15).height(100).width(100)
-        titleLabel.pin.after(of: imageViewNews,aligned: .top).right(30).marginHorizontal(10).sizeToFit(.width).bottom()
+        titleLabel.pin.after(of: imageViewNews,aligned: .top).right(30).marginHorizontal(10).sizeToFit(.width).bottom(5)
      //   sourceLabel.pin.below(of: titleLabel,aligned: .left).width(of: titleLabel).marginTop(5).sizeToFit(.width).right(30).bottom(5)
         favoriteButton.pin.after(of: titleLabel,aligned: .top).width(25).height(25).marginLeft(5)
     }

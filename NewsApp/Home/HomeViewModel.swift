@@ -61,6 +61,11 @@ class HomeVM {
               
                 let index = favoriteNews.firstIndex(where: {$0.url == new.url})
                 favoriteNews.remove(at: index!)
+                let encoder = JSONEncoder()
+                if let encoded = try? encoder.encode(favoriteNews) {
+                    let defaults = UserDefaults.standard
+                    defaults.set(encoded, forKey: "fav")
+                }
               //  favoriteNews = favoriteNews.uniqued()
           //      print("favoriteNews.count")
                 return

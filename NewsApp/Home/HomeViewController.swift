@@ -51,10 +51,10 @@ class HomeViewController: UIViewController {
         mainTable.dataSource = self
         
        
-        let header = CustomHeader(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.width/3.5))
-        header.setTitle(title: "  Последние заголовки")
+        let header = CustomHeader(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.width/4))
+        header.setTitle(title: " Последние заголовки")
         
-        mainTable.tableHeaderView = header
+       mainTable.tableHeaderView = header
         view.addSubview(mainTable)
     }
     
@@ -97,6 +97,8 @@ extension HomeViewController : UITableViewDelegate, UITableViewDataSource {
             cell.setup(with: cellVM[indexPath.row])
             cell.delegate = self
             cell.tag = indexPath.row
+            cell.chechStar(aNew: news[indexPath.row])
+            
             return cell
         }
         return UITableViewCell()
@@ -104,7 +106,7 @@ extension HomeViewController : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = SelectedViewController(aNew: news[indexPath.row])
-        vc.navigationItem.largeTitleDisplayMode = .never
+        vc.navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.pushViewController(vc, animated: true)
       
     }
@@ -116,14 +118,7 @@ extension HomeViewController : UITableViewDelegate, UITableViewDataSource {
 
 }
 
-extension HomeViewController : UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let header = mainTable.tableHeaderView as? CustomHeader else {
-            return
-        }
-        header.scrollViewDidScroll(scrollView: mainTable)
-    }
-}
+
 
 extension HomeViewController : cellButtonClick {
     func clickStar(tag: Int) {

@@ -29,8 +29,8 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
     
     private let tableView : UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .systemBackground
-       tableView.register(SearchResultsTableViewCell.self,
+        tableView.backgroundColor = .gray
+        tableView.register(SearchResultsTableViewCell.self,
                            forCellReuseIdentifier: SearchResultsTableViewCell.identifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.isHidden = true
@@ -54,6 +54,8 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
       
         view.addSubview(showEmptyLabel)
         view.addSubview(tableView)
+        view.backgroundColor = .gray
+        
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -67,6 +69,16 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         tableView.frame = view.bounds
   
       
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        navigationController?.navigationBar.tintColor = .red
+        navigationController?.navigationBar.backgroundColor = .red
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+        navigationController?.navigationBar.isHidden = false
+        
     }
     
     private func createModels(news : [News]) {
@@ -100,12 +112,48 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         
     }
     
+    func addToFavoriteOrDeleteFrom(new : News) {
+        
+        for aNew in favoriteNews {
+            if aNew.url == new.url {
+              
+                let index = favoriteNews.firstIndex(where: {$0.url == new.url})
+                favoriteNews.remove(at: index!)
+                let encoder = JSONEncoder()
+                if let encoded = try? encoder.encode(favoriteNews) {
+                    let defaults = UserDefaults.standard
+                    defaults.set(encoded, forKey: "fav")
+                }
+              //  favoriteNews = favoriteNews.uniqued()
+          //      print("favoriteNews.count")
+                return
+
+            } }
+
+        
+        favoriteNews.insert(new, at: 0)
+        favoriteNews =  favoriteNews.uniqued()
+       
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(favoriteNews) {
+            let defaults = UserDefaults.standard
+            defaults.set(encoded, forKey: "fav")
+        }
+        
+}
+    
 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
         if let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsTableViewCell.identifier) as? SearchResultsTableViewCell{
             cell.setup(with: cellVM[indexPath.row])
+            cell.backgroundColor = .gray
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
+            cell.tag = indexPath.row
+            cell.delegate = self
+            cell.chechStar(aNew: news[indexPath.row])
+
             return cell
         }
         return UITableViewCell()
@@ -114,16 +162,16 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        print("123")
         
         let vc = SelectedViewController(aNew: news[indexPath.row])
         vc.navigationItem.largeTitleDisplayMode = .never
+        vc.hidesBottomBarWhenPushed = true
+        
+        
         
         self.tabBarController?.tabBar.isHidden = true
         tabBarController?.tabBar.isHidden = true
         
-        tabBarController?.tabBar.layer.zPosition = -1
         delegate?.showResult(vc)
        
     }
@@ -131,4 +179,15 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
     }
+}
+
+extension SearchResultViewController : cellButtonClick {
+    
+    func clickStar(tag: Int) {
+        
+    addToFavoriteOrDeleteFrom(new:news[tag])
+        
+    }
+    
+    
 }

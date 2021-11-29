@@ -29,7 +29,7 @@ class FavoriteCell : UITableViewCell {
     let titleLabel : UILabel = {
         let label = UILabel()
         label.text = ""
-        label.numberOfLines = 0
+        label.numberOfLines = 5
         return label
     }()
     
@@ -58,7 +58,7 @@ class FavoriteCell : UITableViewCell {
         favoriteButton.addTarget(self, action: #selector(buttonClick), for: .touchUpInside)
        
     
-    for element in [imageViewNews,titleLabel,sourceLabel,favoriteButton] {
+    for element in [imageViewNews,titleLabel,sourceLabel] {
         contentView.addSubview(element)
     }
     
@@ -81,9 +81,10 @@ class FavoriteCell : UITableViewCell {
     }
     
     override func layoutSubviews() {
-        contentView.pin.vertically(10).horizontally(5)
+        contentView.pin.vertically(10).horizontally(10)
         imageViewNews.pin.left(10).vertically(15).height(100).width(100)
-        titleLabel.pin.after(of: imageViewNews,aligned: .top).right(30).marginHorizontal(10).sizeToFit(.width).bottom()
-        favoriteButton.pin.after(of: titleLabel,aligned: .top).width(25).height(25).marginLeft(5)
+        titleLabel.pin.after(of: imageViewNews,aligned: .top).right(30).marginHorizontal(10).sizeToFit(.widthFlexible).height(100)
+      //  favoriteButton.pin.after(of: titleLabel,aligned: .top).width(25).height(25).marginLeft(5)
     }
 }
+

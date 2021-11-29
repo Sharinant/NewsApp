@@ -13,7 +13,7 @@ class CustomHeader: UIView {
     
     public let titleLabel : UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 25, weight: .bold)
+        label.font = .systemFont(ofSize: 23, weight: .bold)
         return label
     }()
     
@@ -48,9 +48,10 @@ class CustomHeader: UIView {
     
     func configure() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        titleLabel.textAlignment = .left
+        titleLabel.sizeToFit()
         titleLabel.textColor = .white
-        titleLabel.font = .systemFont(ofSize: 34, weight: .bold)
+        titleLabel.font = .systemFont(ofSize: 32, weight: .bold)
     }
     
     func setViewConstrains() {

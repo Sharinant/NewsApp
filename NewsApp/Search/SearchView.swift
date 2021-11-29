@@ -13,10 +13,12 @@ class SearchView: UIViewController, UISearchResultsUpdating, UISearchBarDelegate
     
     var results: [News] = []
     
+    
     let searchController : UISearchController = {
         let vc = UISearchController(searchResultsController: SearchResultViewController())
         vc.searchBar.placeholder = "Ключевые слова, события... "
-        vc.searchBar.backgroundColor = .darkGray
+       // vc.searchBar.backgroundColor = .darkGray
+        vc.searchBar.searchTextField.backgroundColor = .darkGray
         vc.searchBar.tintColor = .black
         vc.searchBar.searchBarStyle = .minimal
         vc.definesPresentationContext = true
@@ -34,7 +36,7 @@ class SearchView: UIViewController, UISearchResultsUpdating, UISearchBarDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = "Поиск"
         view.backgroundColor = .gray
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
@@ -65,7 +67,6 @@ class SearchView: UIViewController, UISearchResultsUpdating, UISearchBarDelegate
             case .success(let models):
                 self.results = models
                resultsController.update(with: models)
-                print(self.results[0].title)
             }
         }
         
@@ -96,9 +97,9 @@ extension SearchView: SearchResultViewControllerDelegate{
         
         controller.modalPresentationStyle = .overFullScreen
         
-        show(controller, sender: nil)
+       // show(controller, sender: nil)
         
-     //  navigationController?.pushViewController(controller, animated: true)
+      navigationController?.pushViewController(controller, animated: true)
        
         
 

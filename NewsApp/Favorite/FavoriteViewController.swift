@@ -13,7 +13,7 @@ class FavoriteViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .green
+        view.backgroundColor = .gray
         createTable()
         // Do any additional setup after loading the view.
     }
@@ -32,7 +32,7 @@ class FavoriteViewController: UIViewController {
         mainTable.dataSource = self
         
        
-        let header = CustomHeader(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.width/3))
+        let header = CustomHeader(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.width/4))
         header.setTitle(title:"  Избранное")
         
         mainTable.tableHeaderView = header
@@ -79,6 +79,7 @@ extension FavoriteViewController : UITableViewDelegate, UITableViewDataSource {
         if let cell = mainTable.dequeueReusableCell(withIdentifier: FavoriteCell.identifier) as? FavoriteCell{
             cell.setup(with: cellVM[indexPath.row])
             cell.tag = indexPath.row
+            cell.backgroundColor = .gray
             cell.delegate = self
             return cell
         }
@@ -88,7 +89,8 @@ extension FavoriteViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let vc = SelectedViewController(aNew: favoriteNews[indexPath.row])
-        vc.navigationItem.largeTitleDisplayMode = .never
+        vc.navigationItem.largeTitleDisplayMode = .always
+        vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
       
     }
@@ -97,13 +99,34 @@ extension FavoriteViewController : UITableViewDelegate, UITableViewDataSource {
         return 150
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+           print("Deleted")
+           favoriteNews.remove(at: indexPath.row)
+           self.mainTable.beginUpdates()
+           NotificationCenter.default.post(name: NSNotification.Name("ChangeFavStar"), object: nil)
+           self.mainTable.deleteRows(at: [indexPath], with: .automatic)
+           self.mainTable.endUpdates()
+            
+            let encoder = JSONEncoder()
+            if let encoded = try? encoder.encode(favoriteNews) {
+                let defaults = UserDefaults.standard
+                defaults.set(encoded, forKey: "fav")
+            }
+            
+        }
+    }
 
 }
 
 extension FavoriteViewController : cellButtonClick {
     
     func clickStar(tag: Int) {
-      //  print(tag)
+        print(tag)
         
         favoriteNews.remove(at: tag)
         

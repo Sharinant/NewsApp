@@ -26,6 +26,7 @@ class SelectedViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
         viewModel.delegate = self
         viewModel.delegateChange = self
         viewModel.new = new
@@ -58,6 +59,7 @@ class SelectedViewController: UIViewController {
     
     @objc func didTapFavorite() {
         viewModel.addToFavoriteOrDeleteFrom()
+        NotificationCenter.default.post(name: NSNotification.Name("ChangeFavStar"), object: nil)
        
     }
     

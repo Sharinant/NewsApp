@@ -8,22 +8,30 @@
 import UIKit
 
 class TabBarViewController: UITabBarController {
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tabBar.barTintColor = .white
         tabBar.isTranslucent = false
+        tabBar.backgroundColor = .white
         let vc1 = HomeViewController()
         let vc2 = SearchView()
         let vc3 = FavoriteViewController()
         
-    vc1.title = "Последние заголовки"
-    vc2.title = "Поиск"
-    vc3.title = "Избранное"
+   
         
+        let nav1 = UINavigationController(rootViewController: vc1)
         let nav2 = UINavigationController(rootViewController: vc2)
+        let nav3 = UINavigationController(rootViewController: vc3)
         
-      //  vc1.navigationItem.largeTitleDisplayMode = .always
+        
+        nav1.title = "Последние заголовки"
+        nav2.title = "Поиск"
+        nav3.title = "Избранное"
+        
+        
+        vc1.navigationItem.largeTitleDisplayMode = .always
         vc1.navigationController?.isNavigationBarHidden = true
         vc1.navigationController?.setNavigationBarHidden(true, animated: false)
         vc1.tabBarItem = UITabBarItem(title: "Главное", image: UIImage(systemName: "note.text"), tag : 1)
@@ -33,11 +41,11 @@ class TabBarViewController: UITabBarController {
         nav2.tabBarItem = UITabBarItem(title: "Поиск", image: UIImage(systemName: "magnifyingglass"), tag : 2)
         nav2.navigationItem.largeTitleDisplayMode = .always
         
-        vc3.navigationController?.isNavigationBarHidden = true
-        vc3.navigationController?.setNavigationBarHidden(true, animated: false)
-        vc3.tabBarItem = UITabBarItem(title: "Избранное", image: UIImage(systemName: "star.square"), tag : 1)
+        nav3.navigationController?.isNavigationBarHidden = true
+        nav3.navigationController?.setNavigationBarHidden(true, animated: false)
+        nav3.tabBarItem = UITabBarItem(title: "Избранное", image: UIImage(systemName: "star.square"), tag : 1)
         
-        setViewControllers([vc1,nav2,vc3], animated: true)
+        setViewControllers([vc1,nav2,nav3], animated: true)
         
     }
     

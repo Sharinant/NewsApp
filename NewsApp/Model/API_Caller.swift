@@ -11,7 +11,7 @@ final class APICaller {
     
     static let shared = APICaller()
     
-     let APIkey = "6ee99be08dad6aff545aac2d027e42e6"
+     let APIkey = "d98f593f746d1c05b143b726c0a54ed7"
     
   
     func getLatestNews(completion : @escaping (Result<[Articles],Error>) -> Void) {
@@ -62,27 +62,6 @@ final class APICaller {
         
     }
     
-    func search(q: String)  {
-        guard let url = URL(string: createSearchDomen(q: q)) else {
-            return
-        }
-        createRequest(url: url) { request in
-            let task = URLSession.shared.dataTask(with: request) { (data,_, error) in
-                
-                if error != nil {
-                    return
-                }
-                guard let data = data else {
-                    return
-                }
-                
-                print(String(data: data, encoding: .utf8))
-               
-            }
-            task.resume()
-        }
-            
-    }
     
     public func searchWith(with query:String, completion: @escaping (Result<[News], Error>)-> Void) {
         

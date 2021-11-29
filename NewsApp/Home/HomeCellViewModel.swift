@@ -30,7 +30,7 @@ class HomeCellViewModel {
         self.sourceName = news.sourceName
         self.imageURL = strToUrl(str: news.image)
         self.new = news
-        self.isInFav = check()
+        self.isInFav = checkNewInFav()
         self.url = news.url
         
     }
@@ -41,7 +41,8 @@ class HomeCellViewModel {
         return url
     }
     
-     func check() -> Bool {
+     func checkNewInFav() -> Bool {
+         
         if favoriteNews.contains(new!) {
             return true
         } else {
