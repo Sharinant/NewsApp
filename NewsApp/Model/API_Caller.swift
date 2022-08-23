@@ -11,7 +11,7 @@ final class APICaller {
     
     static let shared = APICaller()
     
-     let APIkey = "d98f593f746d1c05b143b726c0a54ed7"
+     let APIkey = "6ee99be08dad6aff545aac2d027e42e6"
     
   
     func getLatestNews(completion : @escaping (Result<[Articles],Error>) -> Void) {

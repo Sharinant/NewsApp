@@ -16,22 +16,25 @@ class HomeViewController: UIViewController {
     var cellVM : [HomeCellViewModel] = []
     
 
+    private var activityIndicator : UIActivityIndicatorView?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        showActivityIndicator()
         view.backgroundColor = .gray
         title = "Главная"
         viewModel.delegate = self
         viewModel.loadLatestNews()
-       createTable()
+        createTable()
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
        
         super.viewWillAppear(animated)
-       navigationController?.setNavigationBarHidden(true, animated: animated)
-       navigationController?.navigationBar.isHidden = true
+    //   navigationController?.setNavigationBarHidden(true, animated: animated)
+    //   navigationController?.navigationBar.isHidden = true
         self.tabBarController?.tabBar.isHidden = false
 
     }
@@ -54,7 +57,7 @@ class HomeViewController: UIViewController {
         let header = CustomHeader(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.width/4))
         header.setTitle(title: " Последние заголовки")
         
-       mainTable.tableHeaderView = header
+      // mainTable.tableHeaderView = header
         view.addSubview(mainTable)
     }
     
@@ -64,6 +67,23 @@ class HomeViewController: UIViewController {
         super.viewDidLayoutSubviews()
         mainTable.frame = view.bounds
     }
+    
+    
+    private func showActivityIndicator() {
+            activityIndicator = UIActivityIndicatorView(style: .large)
+            activityIndicator?.color = .black
+            activityIndicator?.hidesWhenStopped = true
+            activityIndicator?.center = self.view.center
+            self.mainTable.addSubview(activityIndicator!)
+            activityIndicator?.startAnimating()
+        }
+    
+    private func hideActivityIndicator() {
+           if activityIndicator != nil {
+               activityIndicator?.stopAnimating()
+           }
+       }
+    
 
 }
 
@@ -71,6 +91,8 @@ extension HomeViewController : HomeViewUpdate {
     
     func loadModels(models: [HomeCellViewModel]) {
         cellVM = models
+        hideActivityIndicator()
+        
     }
     
     func loadNews(news: [News]) {
@@ -106,6 +128,8 @@ extension HomeViewController : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = SelectedViewController(aNew: news[indexPath.row])
+        vc.hidesBottomBarWhenPushed = true
+        vc.navigationController?.navigationBar.isHidden = true 
         vc.navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.pushViewController(vc, animated: true)
       
@@ -124,10 +148,5 @@ extension HomeViewController : cellButtonClick {
     func clickStar(tag: Int) {
         viewModel.addToFavoriteOrDeleteFrom(new: news[tag])
     }
-    
-   
-    
-   
-    
     
 }

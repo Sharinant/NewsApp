@@ -31,10 +31,12 @@ class TabBarViewController: UITabBarController {
         nav3.title = "Избранное"
         
         
-        vc1.navigationItem.largeTitleDisplayMode = .always
+        nav1.navigationItem.largeTitleDisplayMode = .always
         vc1.navigationController?.isNavigationBarHidden = true
         vc1.navigationController?.setNavigationBarHidden(true, animated: false)
+        nav1.tabBarItem = UITabBarItem(title: "Главное", image: UIImage(systemName: "note.text"), tag : 1)
         vc1.tabBarItem = UITabBarItem(title: "Главное", image: UIImage(systemName: "note.text"), tag : 1)
+
     
        // vc2.navigationController?.isNavigationBarHidden = true
       //  vc2.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -43,7 +45,7 @@ class TabBarViewController: UITabBarController {
         
         nav3.navigationController?.isNavigationBarHidden = true
         nav3.navigationController?.setNavigationBarHidden(true, animated: false)
-        nav3.tabBarItem = UITabBarItem(title: "Избранное", image: UIImage(systemName: "star.square"), tag : 1)
+        nav3.tabBarItem = UITabBarItem(title: "Избранное", image: UIImage(systemName: "star.square"), tag : 3)
         
         setViewControllers([vc1,nav2,nav3], animated: true)
         
